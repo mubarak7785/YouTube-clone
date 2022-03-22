@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Video</title>
+    <script
+      src="https://kit.fontawesome.com/683b4b40e3.js"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      h5{
+        color: white;
+        text-align: center;
+        margin-top: 05px;
+        font-size: 20px;
+      }
+     #main {
+        width: 80%;
+        display: grid;
+        grid-template-columns: repeat(4, 25%);
+        grid-gap: 0px;
+       
+        flex: 4;
+        margin-left: 20px;
+
+      }
+      #logo {
+        margin-top: -12px;
+        width: 150px;
+        height: 70px;
+      }
+      #navbar {
+        display: flex;
+      }
+      input {
+        height: 35px;
+        width: 450px;
+        margin-left: 250px;
+        font-size: 20px;
+      }
+      button {
+        height: 40px;
+        width: 60px;
+      }
+      #search {
+        display: flex;
+      }
+      #logo_menu {
+        display: flex;
+        gap: 20px;
+        margin-left: 20px;
+      }
+      #bar {
+        margin-top: 8px;
+        height: 40px;
+      }
+      #content{
+        display: flex;
+        
+      }
+      #icons{
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        
+        width: 80px;
+      }
+      img{
+        width: 280px;
+      }
+      i{
+        font-size: 30px;
+        text-align: center;
+      }
+      h4{
+        margin-top: -15px;
+        text-align: center;
+      }
+      #mic{
+        margin-left: 10px;
+        margin-top: 2px;
+      }
+      #end{
+        margin-left: 200px;
+        display: flex;
+        gap: 20px;
+      }
+      #profile{
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        border: 1px solid black;
+        color: white;
+        background-color: black;
+        
+        
+      }
+
+      #main {
+        margin-top: 20px;
+        display: flex;
+        height: 600px;
+        border: 1px solid black;
+      }
+      #video {
+        flex: 3;
+      }
+      #recommendation {
+        flex: 1.5;
+        overflow: scroll;
+        margin-left: 20px;
+      }
+      .side {
+        display: flex;
+        margin-bottom: 10px;
+      }
+      .thumb {
+        width: 220px;
+        height: 100px;
+       
+      }
+      .title {
+        padding-left: 10px;
+        margin-top: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="navbar">
+      <div id="logo_menu">
+        <i id="bar" class="fas fa-bars"></i>
+        <img
+          id="logo"
+          src="https://logos-world.net/wp-content/uploads/2020/04/YouTube-Logo-2017-present.jpg"
+          alt=""
+        />
+      </div>
+      <div id="search">
+        <input placeholder="Search" type="text" id="video1" />
+        <button onclick="searchVideo()"><i class="fas fa-search"></i></button>
+        <i id="mic" class="fas fa-microphone"></i>
+        <div id="end">
+          <i class="fas fa-bell"></i>
+          <div id="profile"><h5>M</h5></div>
+        </div>
+      </div>
+    </div>
+    <div id="content">
+      <div id="icons">
+        <i class="fas fa-home"></i> <h4>Home</h6>
+        <i class="far fa-compass"></i><h4>Explorer</h6>
+          <i class="fab fa-youtube"></i><h4>Subscription</h4>
+          <i class="fas fa-book-reader"></i><h4>Library</h4>
+        
+      </div>
+      <div id="main">
+        <div id="video"></div>
+        <div id="recommendation"></div>
+      </div>
+    </div>
+   
+  </body>
+</html>
+<script>
+  let video_data = JSON.parse(localStorage.getItem("clicked_video"));
+  displays(video_data);
+  function displays(video_data) {
+    document.querySelector("#video").innerHTML = null;
+    var x = video_data.id.videoId || video_data.id;
+    let p = document.createElement("p");
+    p.textContent = video_data.snippet.title;
+    console.log(video_data.snippet.title);
+    let iframe = document.createElement("iframe");
+    iframe.src = `https://www.youtube.com/embed/${x}`;
+
+    iframe.width = "100%";
+    iframe.height = "100%";
+    iframe.setAttribute("allowfullscreen", "true");
+    document.querySelector("#video").append(iframe, p);
+  }
+  // --------------side videos--------------------
+  let side = JSON.parse(localStorage.getItem("side_videos"));
+  console.log(side);
+  appendVideos(side);
+  function appendVideos(items) {
+    items.forEach((el) => {
+      let {
+        snippet,
+        id: { videoId },
+        id,
+      } = el;
+
+      let div = document.createElement("div");
+
+      let title = document.createElement("p");
+      title.innerHTML = snippet.title;
+      title.setAttribute("class", "title");
+      let thumbnail = document.createElement("img");
+      thumbnail.src = snippet.thumbnails.medium.url;
+      thumbnail.setAttribute("class", "thumb");
+      div.append(thumbnail, title);
+      div.setAttribute("class", "side");
+      document.querySelector("#recommendation").append(div);
+      div.onclick = function () {
+        displays(el);
+      };
+    });
+  }
+</script>
